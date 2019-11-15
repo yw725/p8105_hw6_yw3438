@@ -1,0 +1,15 @@
+---
+title: "p8105_hw6_yw3438"
+author: "Yuning Wang"
+date: "11/15/2019"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(modelr)
+library(mgcv)
+```
+
