@@ -219,7 +219,7 @@ bootstrap_beta %>%
   theme_bw()
 ```
  
-From the distribution of log(beta0_hat * beta1_hat) has little extending tail on the left side and is almost symmetric, which indicates that there are almost no outliers in the bootstrap sample.
+From the distribution of log(beta0_hat * beta1_hat) has little extending tail on the left side and is almost symmetric, which indicates that there are almost no outliers in the bootstrap sample but the sample isn't normally distributed.
 
 
 
