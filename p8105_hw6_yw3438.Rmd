@@ -13,3 +13,25 @@ library(modelr)
 library(mgcv)
 ```
 
+## Problem 1
+
+```{r message=FALSE}
+birthweight = 
+  read_csv("./data/birthweight.csv") %>% 
+  janitor::clean_names() %>% 
+  mutate(
+    babysex = factor(recode(babysex, "1" = "male", "2" = "female")),
+    frace = factor(recode(frace, "1" = "white", "2" = "black", "3" = "asian",
+                   "4" = "puerto rican", "8" = "other", "9" = "unknow")),
+    malform = factor(recode(malform, "0" = "absent", "1" = "present")),
+    mrace = factor(recode(mrace,  "1" = "white", "2" = "black", "3" = "asian",
+                   "4" = "puerto rican", "8" = "other"))
+  )
+```
+
+To set up a regression model for birth weight, 
+
+
+
+
+
