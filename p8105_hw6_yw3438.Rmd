@@ -154,7 +154,7 @@ weather_df =
   select(name, id, everything())
 ```
 
- - Estimates of $$\hat r^2$$
+ - Estimates of r-squared
 
 ```{r}
 # Generate the bootstrap samples
@@ -185,10 +185,10 @@ bootstrap_rsquared %>%
   theme_bw()
 ```
 
-From the ditribution of $$\hat r^2$$
+From the ditribution of r-squared has a little tail extending to low values, which indicates there might be some outliers included in the bootstrap sample.
 
 
- - Estimation of $$\hat r^2$$
+ - Estimation of log(beta0_hat * beta1_hat)
  
 ```{r}
 # Look at bootstrap results of log(beta0_hat * beta1_hat)
@@ -219,7 +219,7 @@ bootstrap_beta %>%
   theme_bw()
 ```
  
-
+From the distribution of log(beta0_hat * beta1_hat) has little extending tail on the left side and is almost symmetric, which indicates that there are almost no outliers in the bootstrap sample.
 
 
 
