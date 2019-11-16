@@ -154,7 +154,7 @@ weather_df =
   select(name, id, everything())
 ```
 
- - Estimates of r-squared
+ - Estimates of $$\hat r^2$$
 
 ```{r}
 # Generate the bootstrap samples
@@ -162,7 +162,7 @@ boot_straps =
   weather_df %>% 
   modelr::bootstrap(n = 5000)
 
-# Look at bootstrap results
+# Look at bootstrap results of r-squared
 bootstrap_rsquared = 
   boot_straps %>% 
    mutate(
@@ -185,7 +185,40 @@ bootstrap_rsquared %>%
   theme_bw()
 ```
 
+From the ditribution of $$\hat r^2$$
 
+
+ - Estimation of $$\hat r^2$$
+ 
+```{r}
+# Look at bootstrap results of log(beta0_hat * beta1_hat)
+bootstrap_beta = 
+  boot_straps %>% 
+   mutate(
+    models = map(strap, ~lm(tmax ~ tmin, data = .x) ),
+    results = map(models, broom::tidy)) %>% 
+  select(-strap, -models) %>% 
+  unnest(results) %>% 
+  select(.id, term, estimate) %>% 
+  pivot_wider(
+    names_from = term,
+    values_from = estimate
+  ) %>% 
+  janitor::clean_names() %>% 
+  mutate(boot_log = log(intercept * tmin))
+
+# draw the distribution of estimate
+bootstrap_beta %>% 
+  ggplot(aes(x = boot_log)) +
+  geom_density() +
+  labs(
+    title = "Distribution of log(beta0_hat * beta1_hat)",
+    x = "Value of log(beta0_hat * beta1_hat)",
+    y = "Density"
+  ) +
+  theme_bw()
+```
+ 
 
 
 
