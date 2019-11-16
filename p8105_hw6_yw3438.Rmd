@@ -29,7 +29,18 @@ birthweight =
   )
 ```
 
-To set up a regression model for birth weight, 
+The birth weight is an outcome that may depend on 'mother's weight gain during pregnancy' and 'mother's race'. We fit the initial model in the following code.
+
+```{r}
+fit = lm(bwt ~ wtgain + mrace, data = birthweight)
+# read the results of the model
+fit %>% 
+  broom::tidy() %>% 
+  select(term, estimate, p.value) %>% 
+  mutate(term = str_replace(term, "^mrace", "Race: ")) %>% 
+  knitr::kable(digits = 3)
+```
+
 
 
 
