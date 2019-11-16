@@ -11,6 +11,8 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(modelr)
 library(mgcv)
+library(viridis)
+library(ggridges)
 ```
 
 ## Problem 1
@@ -29,10 +31,10 @@ birthweight =
   )
 ```
 
-The birth weight is an outcome that may depend on 'mother's weight gain during pregnancy' and 'mother's race'. We fit the initial model in the following code.
+The birth weight is an outcome that may depend on 'average number of cigarettes smoked per day during pregnancy' and 'mother's race'. We fit the initial model in the following code.
 
 ```{r}
-fit = lm(bwt ~ wtgain + mrace, data = birthweight)
+fit = lm(bwt ~ smoken + mrace, data = birthweight)
 # read the results of the model
 fit %>% 
   broom::tidy() %>% 
@@ -40,6 +42,44 @@ fit %>%
   mutate(term = str_replace(term, "^mrace", "Race: ")) %>% 
   knitr::kable(digits = 3)
 ```
+
+The plot of model residuals against fitted values are as followed.
+
+- Residuals against 'mother's race'
+
+```{r}
+birthweight %>% 
+  modelr::add_residuals(fit) %>% 
+  ggplot(aes(x = mrace, y = resid, fill = mrace)) +
+  geom_violin() +
+  labs(
+    title = "Residuals Against Mother's Race",
+    x = "Mother's Race",
+    y = "Residuals"
+  ) +
+  theme_bw() +
+  theme(legend.position = "bottom") +
+  viridis::scale_fill_viridis(
+    name = "Mother's Race",
+    discrete = T)
+```
+
+- Residuals against 'average number of cigarettes smoked per day during pregnancy'
+
+```{r}
+birthweight %>% 
+  modelr::add_residuals(fit) %>% 
+  ggplot(aes(x = smoken, y = resid)) +
+  geom_point() +
+  labs(
+    title = "Residuals Against Average Number of Cigarettes",
+    x = "Average Number of Cigarettes",
+    y = "Residuals"
+  ) +
+  theme_bw() 
+```
+
+
 
 
 
