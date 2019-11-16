@@ -139,7 +139,7 @@ From the distribution of RMSE values for each model, it can be discovered that t
 
 ## Problem 2
 
-```{r}
+```{r message=FALSE}
 # read in the data
 weather_df = 
   rnoaa::meteo_pull_monitors(
@@ -221,8 +221,26 @@ bootstrap_beta %>%
  
 From the distribution of log(beta0_hat * beta1_hat) has little extending tail on the left side and is almost symmetric, which indicates that there are almost no outliers in the bootstrap sample but the sample isn't normally distributed.
 
+ - The confidence interval of r-squared
+ 
+ The CI of r-squared can be calculated by the 2.5% and 97.5% quantiles.
+ 
+```{r}
+qua_low_r = quantile(bootstrap_rsquared$r_squared, probs = 0.025)
+qua_high_r = quantile(bootstrap_rsquared$r_squared, probs = 0.975)
+```
+ 
+The 95% CI of r-squared is (`r qua_low_r`, `r qua_high_r`).
 
+ - The confidence interval of log(beta0_hat * beta1_hat)
+ 
+ The CI of log(beta0_hat * beta1_hat) can be calculated by the 2.5% and 97.5% quantiles.
 
+```{r}
+qua_low_beta = quantile(bootstrap_beta$boot_log, probs = 0.025)
+qua_high_beta = quantile(bootstrap_beta$boot_log, probs = 0.975)
+```
 
+The 95% CI of log(beta0_hat * beta1_hat) is (`r qua_low_beta`, `r qua_high_beta`).
 
 
