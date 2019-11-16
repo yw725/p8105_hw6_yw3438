@@ -13,6 +13,8 @@ library(modelr)
 library(mgcv)
 library(viridis)
 library(ggridges)
+
+set.seed(1)
 ```
 
 ## Problem 1
@@ -133,6 +135,60 @@ select(starts_with("rmse")) %>%
 ```
 
 From the distribution of RMSE values for each model, it can be discovered that the RMSE is smallest at the model using head circumference, length, sex and all interactions between these. As a result, it's better to use the last fitted model.
+
+
+## Problem 2
+
+```{r}
+# read in the data
+weather_df = 
+  rnoaa::meteo_pull_monitors(
+    c("USW00094728"),
+    var = c("PRCP", "TMIN", "TMAX"), 
+    date_min = "2017-01-01",
+    date_max = "2017-12-31") %>%
+  mutate(
+    name = recode(id, USW00094728 = "CentralPark_NY"),
+    tmin = tmin / 10,
+    tmax = tmax / 10) %>%
+  select(name, id, everything())
+```
+
+ - Estimates of r-squared
+
+```{r}
+# Generate the bootstrap samples
+boot_straps = 
+  weather_df %>% 
+  modelr::bootstrap(n = 5000)
+
+# Look at bootstrap results
+bootstrap_rsquared = 
+  boot_straps %>% 
+   mutate(
+    models = map(strap, ~lm(tmax ~ tmin, data = .x) ),
+    results = map(models, broom::glance)) %>% 
+  select(-strap, -models) %>% 
+  unnest(results) %>% 
+  janitor::clean_names() %>% 
+  select(r_squared, adj_r_squared)
+
+# draw the distribution of estimate
+bootstrap_rsquared %>% 
+  ggplot(aes(x = r_squared)) +
+  geom_density() +
+  labs(
+    title = "Distribution of r-squared",
+    x = "Value of r-squared",
+    y = "Density"
+  ) +
+  theme_bw()
+```
+
+
+
+
+
 
 
 
